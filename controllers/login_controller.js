@@ -27,6 +27,5 @@ exports.login = function(req, res){
             // unfound -> reject
             res.status(400).json({success: fals, message: 'Login or password unknown/incorrect.'})
         }
-
     });
 }
