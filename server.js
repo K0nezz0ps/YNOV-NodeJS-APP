@@ -2,14 +2,16 @@ let express     = require('express');
 let mongoose    = require('mongoose');
 let bodyParser  = require('body-parser');
 
+let auth        = require('./utils/token_validation');
+
 let user_route  = require('./routes/user_route.js');
 let event_route = require('./routes/event_route.js');
 let login_route = require('./routes/login_route.js');
 
 let app = initServer(4300);
 
-app.use('/rest/User' , user_route);  // USER
-app.use('/rest/Event', event_route); // EVENT
+app.use('/rest/User' , auth, user_route);  // USER
+app.use('/rest/Event', auth, event_route); // EVENT
 app.use('/auth'      , login_route); // LOGIN
 
 // INIT an Express Server
