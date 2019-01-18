@@ -1,5 +1,6 @@
-let app = require('express').Router();
+let app             = require('express').Router();
 let user_controller = require('../controllers/user_controller')
+
 /**
  * @Mapping('/rest/User/*')
  */

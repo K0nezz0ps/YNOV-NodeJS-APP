@@ -1,4 +1,5 @@
 let userModel = require('../models/user_model')
+let auth      = require('../utils/auth')
 
 /**
  * @RequestMapping @GET /rest/User
