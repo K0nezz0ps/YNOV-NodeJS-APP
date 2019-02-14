@@ -48,12 +48,23 @@ module.exports = {
         return userRole.contains(expectedRole);
     },
 
+    getCurrentUser(req){
+
+        // get JWToken from request (User)
+        let cToken = req.headers['authorization'];
+
+        cToken = cToken.split(" ")[1] || req.headers['x-access-token'];
+
+        // get the decoded Token
+        return jwtFactory.verify(cToken, properties.tokenKey);
+    },
+
     /**
-     * BOOLEAN Method that return TRUE if the userRole Array contains the ADMIN Role
+     * BOOLEAN Method that return throw a 403 error if the provided user is not an admin
      * @param {*} userRole 
      */
-    validateAdmin(userRole = []){
-        return validateAccess(userRole, ADMIN);
+    validateAdmin(req){
+        return this.getCurrentUser(req).isAdmin;
     },
 
     /**
@@ -65,25 +76,24 @@ module.exports = {
     validSession(req, res, next){
 
         // get JWToken from request (User)
-        let cToken = req.headers['authorization'].split(" ")[1] || req.headers['x-access-token'];
+        let cToken = req.headers['authorization'];
 
         // missing the JWToken from request (did the User deleted it manually ?)
         if(!cToken)
             res.status(400).json({status: "error", message: "Missing JWToken for authentication, please login."})
+
+        cToken = cToken.split(" ")[1] || req.headers['x-access-token'];
 
         // verify it using the Factory (that create the Token on login too)
         jwtFactory.verify(cToken, properties.tokenKey, (err, decodedToken) => {
 
             // Token expired (timed-out) or invalid (hacking ?)
             if(err){
-
                 // throw 401 (Unauthorized) error
                 res.status(401).json({status: "error", message: err.message});
-
             }
             // Token is valid
             else {
-                console.log("VALID JWToken provided, calling next() method to continue...");
                 next();
             }
         });

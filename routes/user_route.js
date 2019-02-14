@@ -6,10 +6,28 @@ let user_controller = require('../controllers/user_controller')
  */
 
 app.route('/')
+/**
+ * @swagger
+ * /rest/User@POST:
+ *   post:
+ *     description: Access to User
+ */
    .get(user_controller.getUser)
-   .post(user_controller.createUser)
+/**
+ * @swagger
+ * /rest/User@PUT:
+ *   post:
+ *     description: Update User values
+ */
+   .put(user_controller.updateUser)
 
 app.route('/:id')
+/**
+ * @swagger
+ * /rest/User:id@GET:
+ *   post:
+ *     description: Access to User
+ */
    .get(user_controller.getUser)
 
 module.exports = app;
